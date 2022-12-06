@@ -6,10 +6,25 @@ function App() {
   const [text,setText] = useState('')
   const [password,setPassword] = useState('')
   const [submitted, setSubmitted] = useState(false)
+  const [isLogged, setIsLogged] = useState(false)
+  const [admin,setAdmin] = useState(false)
+  const [longPassword, setLongPassword] = useState(false)
   
   function handleSubmit(e){
     e.preventDefault()
-    setSubmitted(true)
+    if(password.length>30){
+      setLongPassword(true)
+      setAdmin(false)
+      setSubmitted(false)
+    }else if(password == "admin123" && text == "admin"){
+      setAdmin(true)
+      setLongPassword(false)
+      setSubmitted(false)
+    }else{
+      setSubmitted(true)
+      setAdmin(false)
+      setLongPassword(false)
+    }
   }
   
   return (
@@ -19,7 +34,9 @@ function App() {
         <input id='password' type='password' value={password} onChange={(e)=> setPassword(e.target.value)}/>
         <button type="submit">Log in</button>
       </form>
-      {submitted?<h1 id="logged">You're logged</h1>:null}
+      {longPassword?<h2 id="password-warning">Password is too long</h2>:null}
+      {admin? <h2 id="logged">Wellcome Admin! You're logged</h2>:null}
+      {submitted?<h1 id="submitted">Hello user! Unfortunately your credentials are not registered. Contact the support team to get help.</h1>:null}
     </div>
   );
 }
